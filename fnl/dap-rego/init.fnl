@@ -6,27 +6,34 @@
         {:path :regal
          :args [:debug]}
         :defaults
-        {:log_level :info}
+        {:log_level :info
+         :stop_on_entry true
+         :stop_on_fail false
+         :stop_on_result true
+         :trace true
+         :enable_print true
+         :rule_indexing false}
         :configurations []})
 
 (fn default-configurations [opts]
-  [{:type :rego
-    :name "Debug Workspace"
-    :request :launch
-    :command :eval
-    :query :data
-    :enablePrint true
-    :logLevel opts.defaults.log_level
-    :bundlePaths ["${workspaceFolder}"]}
-   {:type :rego
-    :name "Launch Rego Workspace"
-    :request :launch
-    :command :eval
-    :query :data
-    :enablePrint true
-    :logLevel opts.defaults.log_level
-    :inputPath "${workspaceFolder}/input.json"
-    :bundlePaths ["${workspaceFolder}"]}])
+  (let [find-input-path (fn []
+                          (let [path (.. (vim.fn.getcwd) :/input.json)]
+                            (when (= (vim.fn.filereadable path) 1)
+                              path)))]
+    [{:type :rego
+      :name "Debug Rego Workspace"
+      :request :launch
+      :command :eval
+      :query :data
+      :stopOnEntry opts.defaults.stop_on_entry
+      :stopOnFail opts.defaults.stop_on_fail
+      :stopOnResult opts.defaults.stop_on_result
+      :trace opts.defaults.trace
+      :enablePrint opts.defaults.enable_print
+      :ruleIndexing opts.defaults.rule_indexing
+      :logLevel opts.defaults.log_level
+      :inputPath find-input-path
+      :bundlePaths ["${workspaceFolder}"]}]))
 
 (fn setup-adapter [dap opts]
   (set dap.adapters.rego
