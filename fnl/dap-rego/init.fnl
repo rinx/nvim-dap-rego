@@ -37,7 +37,7 @@
 
 (fn setup-adapter [dap opts]
   (set dap.adapters.rego
-       {:name :regal-debug
+       {:name opts.adapter_name
         :type :executable
         :command opts.regal.path
         :args opts.regal.args}))

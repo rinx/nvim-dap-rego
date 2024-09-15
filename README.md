@@ -1,63 +1,48 @@
-*nvim-dap-rego.txt*
-*nvim-dap-rego*
+# nvim-dap-rego
 
-========================================================================
-INTRODUCTION                                                  *dap-rego*
+nvim-dap-rego is an extension for nvim-dap, used for debugging OPA/Rego using Regal (https://github.com/StyraInc/regal).
+This extension sets up adapter and basic configurations for debugging Rego policies.
 
-nvim-dap-rego is an extension for nvim-dap, used for debugging
-OPA/Rego using Regal (https://github.com/StyraInc/regal).
-This extension sets up adapter and basic configurations for debugging
-Rego policies.
-
-========================================================================
-CONTENTS                                                  *dap-rego-toc*
-
-    1. Install ..................................... |dap-rego-install|
-    2. Configurations .............................. |dap-rego-config|
-
-========================================================================
-INSTALL                                               *dap-rego-install*
+## Install
 
 This extension requires both nvim-dap and Regal (>= 0.26.0).
 
 Please install nvim-dap-rego as usual.
 
-vim-plug
+- vim-plug
 
->vim
+```vim
 Plug 'rinx/nvim-dap-rego'
-<
+```
 
-Packer
+- Packer
 
->lua
+```lua
 use {
   "rinx/nvim-dap-rego"
 }
-<
+```
 
-lazy.nvim
+- lazy.nvim
 
->lua
+```lua
 {
   "rinx/nvim-dap-rego"
 }
-<
+```
 
-========================================================================
-CONFIGURATIONS                                         *dap-rego-config*
+## Configurations
 
 To use nvim-dap-rego, you'll need to set up it.
 This is done by calling `setup()` function.
 
->lua
+```lua
     require('dap-rego').setup()
-<
+```
 
-It is possible to custom nvim-dap-rego behavior by passing a
-config table to this function.
+It is possible to custom nvim-dap-rego behavior by passing a config table to this function.
 
->lua
+```lua
     require('dap-rego').setup(
       {
         -- here's show the default parameters
@@ -93,6 +78,4 @@ config table to this function.
         configurations = {},
       }
     )
-<
-
-vim: ft=help tw=78 et ts=2 sw=2 sts=2 norl
+```
