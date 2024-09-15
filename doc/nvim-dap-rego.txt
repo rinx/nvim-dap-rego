@@ -25,23 +25,23 @@ Please install nvim-dap-rego as usual.
 vim-plug
 
 >vim
-Plug 'rinx/nvim-dap-rego'
+    Plug 'rinx/nvim-dap-rego'
 <
 
 Packer
 
 >lua
-use {
-  "rinx/nvim-dap-rego"
-}
+    use {
+      "rinx/nvim-dap-rego"
+    }
 <
 
 lazy.nvim
 
 >lua
-{
-  "rinx/nvim-dap-rego"
-}
+    {
+      "rinx/nvim-dap-rego"
+    }
 <
 
 ========================================================================
