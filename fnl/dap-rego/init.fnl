@@ -15,13 +15,37 @@
          :rule_indexing false}
         :configurations []})
 
-(fn default-configurations [opts]
+(fn default-configurations [dap opts]
   (let [find-input-path (fn []
                           (let [path (.. (vim.fn.getcwd) :/input.json)]
                             (when (= (vim.fn.filereadable path) 1)
-                              path)))]
+                              path)))
+        query-input (fn []
+                      (coroutine.create
+                        (fn [co]
+                          (vim.ui.input
+                            {:prompt :Query
+                             :default :data}
+                            (fn [input]
+                              (if (= input "")
+                                (coroutine.resume co dap.ABORT)
+                                (coroutine.resume co input)))))))]
     [{:type :rego
-      :name "Debug Rego Workspace"
+      :name "Debug Rego Workspace by Query"
+      :request :launch
+      :command :eval
+      :query query-input
+      :stopOnEntry opts.defaults.stop_on_entry
+      :stopOnFail opts.defaults.stop_on_fail
+      :stopOnResult opts.defaults.stop_on_result
+      :trace opts.defaults.trace
+      :enablePrint opts.defaults.enable_print
+      :ruleIndexing opts.defaults.rule_indexing
+      :logLevel opts.defaults.log_level
+      :inputPath find-input-path
+      :bundlePaths ["${workspaceFolder}"]}
+     {:type :rego
+      :name "Debug Rego Workspace All"
       :request :launch
       :command :eval
       :query :data
@@ -44,7 +68,7 @@
 
 (fn setup-configurations [dap opts]
   (let [configurations (utils.concat
-                         (default-configurations opts)
+                         (default-configurations dap opts)
                          opts.configurations)]
     (set dap.configurations.rego configurations)))
 
