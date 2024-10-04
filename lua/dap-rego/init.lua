@@ -27,10 +27,10 @@ local function default_configurations(dap, opts)
     return coroutine.create(_4_)
   end
   query_input = _3_
-  return {{type = "rego", name = "Debug Rego Workspace by Query", request = "launch", command = "eval", query = query_input, stopOnEntry = opts.defaults.stop_on_entry, stopOnFail = opts.defaults.stop_on_fail, stopOnResult = opts.defaults.stop_on_result, trace = opts.defaults.trace, enablePrint = opts.defaults.enable_print, ruleIndexing = opts.defaults.rule_indexing, logLevel = opts.defaults.log_level, inputPath = find_input_path, bundlePaths = {"${workspaceFolder}"}}, {type = "rego", name = "Debug Rego Workspace All", request = "launch", command = "eval", query = "data", stopOnEntry = opts.defaults.stop_on_entry, stopOnFail = opts.defaults.stop_on_fail, stopOnResult = opts.defaults.stop_on_result, trace = opts.defaults.trace, enablePrint = opts.defaults.enable_print, ruleIndexing = opts.defaults.rule_indexing, logLevel = opts.defaults.log_level, inputPath = find_input_path, bundlePaths = {"${workspaceFolder}"}}}
+  return {{type = "opa-debug", name = "Debug Rego Workspace by Query", request = "launch", command = "eval", query = query_input, stopOnEntry = opts.defaults.stop_on_entry, stopOnFail = opts.defaults.stop_on_fail, stopOnResult = opts.defaults.stop_on_result, trace = opts.defaults.trace, enablePrint = opts.defaults.enable_print, ruleIndexing = opts.defaults.rule_indexing, logLevel = opts.defaults.log_level, inputPath = find_input_path, bundlePaths = {"${workspaceFolder}"}}, {type = "opa-debug", name = "Debug Rego Workspace All", request = "launch", command = "eval", query = "data", stopOnEntry = opts.defaults.stop_on_entry, stopOnFail = opts.defaults.stop_on_fail, stopOnResult = opts.defaults.stop_on_result, trace = opts.defaults.trace, enablePrint = opts.defaults.enable_print, ruleIndexing = opts.defaults.rule_indexing, logLevel = opts.defaults.log_level, inputPath = find_input_path, bundlePaths = {"${workspaceFolder}"}}}
 end
 local function setup_adapter(dap, opts)
-  dap.adapters.rego = {name = opts.adapter_name, type = "executable", command = opts.regal.path, args = opts.regal.args}
+  dap.adapters["opa-debug"] = {name = opts.adapter_name, type = "executable", command = opts.regal.path, args = opts.regal.args, source_filetype = "rego"}
   return nil
 end
 local function setup_configurations(dap, opts)

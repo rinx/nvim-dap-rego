@@ -30,7 +30,7 @@
                               (if (= input "")
                                 (coroutine.resume co dap.ABORT)
                                 (coroutine.resume co input)))))))]
-    [{:type :rego
+    [{:type :opa-debug
       :name "Debug Rego Workspace by Query"
       :request :launch
       :command :eval
@@ -44,7 +44,7 @@
       :logLevel opts.defaults.log_level
       :inputPath find-input-path
       :bundlePaths ["${workspaceFolder}"]}
-     {:type :rego
+     {:type :opa-debug
       :name "Debug Rego Workspace All"
       :request :launch
       :command :eval
@@ -60,11 +60,12 @@
       :bundlePaths ["${workspaceFolder}"]}]))
 
 (fn setup-adapter [dap opts]
-  (set dap.adapters.rego
+  (set dap.adapters.opa-debug
        {:name opts.adapter_name
         :type :executable
         :command opts.regal.path
-        :args opts.regal.args}))
+        :args opts.regal.args
+        :source_filetype :rego}))
 
 (fn setup-configurations [dap opts]
   (let [configurations (utils.concat
