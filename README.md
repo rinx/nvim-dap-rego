@@ -76,6 +76,10 @@ require('dap-rego').setup(
 
     -- additional dap configurations
     configurations = {},
+
+    -- register `regal/startDebugging` handler to Neovim LSP
+    -- this enables to start debugger by `Debug` codelens
+    codelens_handler = true,
   }
 )
 ```
