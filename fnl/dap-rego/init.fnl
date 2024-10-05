@@ -13,7 +13,9 @@
          :trace true
          :enable_print true
          :rule_indexing false}
-        :configurations []})
+        :configurations []
+        :codelens_handlers
+        {:start_debugging true}})
 
 (fn default-configurations [dap opts]
   (let [find-input-path (fn []
@@ -73,10 +75,34 @@
                          opts.configurations)]
     (set dap.configurations.rego configurations)))
 
+(fn setup-lsp-codelens-handlers [dap opts]
+  (when opts.codelens_handlers.start_debugging
+    (tset vim.lsp.handlers
+          :regal/startDebugging
+          (fn [err result ctx config]
+            (if (not (= (dap.session) nil))
+              (values nil (vim.lsp.rpc.rpc_response_error
+                            vim.lsp.protocol.ErrorCodes.InvalidRequest
+                            "active debug session already exists"))
+              (let [dconf (vim.tbl_deep_extend
+                           :force
+                           result
+                           {:stopOnEntry opts.defaults.stop_on_entry
+                            :stopOnFail opts.defaults.stop_on_fail
+                            :stopOnResult opts.defaults.stop_on_result
+                            :trace opts.defaults.trace
+                            :enablePrint opts.defaults.enable_print
+                            :ruleIndexing opts.defaults.rule_indexing
+                            :logLevel opts.defaults.log_level
+                            :bundlePaths ["${workspaceFolder}"]})]
+                (dap.run dconf)
+                (values {:ok true} nil)))))))
+
 (fn setup [opts]
   (let [opts (vim.tbl_deep_extend :force default-opts (or opts {}))
         dap (utils.load-module :dap)]
     (setup-adapter dap opts)
-    (setup-configurations dap opts)))
+    (setup-configurations dap opts)
+    (setup-lsp-codelens-handlers dap opts)))
 
 {: setup}
