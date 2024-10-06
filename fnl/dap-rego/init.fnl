@@ -1,4 +1,5 @@
 (local utils (require :dap-rego.utils))
+(local lsp (require :dap-rego.lsp))
 
 (local default-opts
        {:adapter_name :regal-debug
@@ -15,7 +16,8 @@
          :rule_indexing false}
         :configurations []
         :codelens_handlers
-        {:start_debugging true}})
+        {:start_debugging true
+         :show_eval_result true}})
 
 (fn default-configurations [dap opts]
   (let [find-input-path (fn []
@@ -77,26 +79,9 @@
 
 (fn setup-lsp-codelens-handlers [dap opts]
   (when opts.codelens_handlers.start_debugging
-    (tset vim.lsp.handlers
-          :regal/startDebugging
-          (fn [err result ctx config]
-            (if (not (= (dap.session) nil))
-              (values nil (vim.lsp.rpc.rpc_response_error
-                            vim.lsp.protocol.ErrorCodes.InvalidRequest
-                            "active debug session already exists"))
-              (let [dconf (vim.tbl_deep_extend
-                           :force
-                           result
-                           {:stopOnEntry opts.defaults.stop_on_entry
-                            :stopOnFail opts.defaults.stop_on_fail
-                            :stopOnResult opts.defaults.stop_on_result
-                            :trace opts.defaults.trace
-                            :enablePrint opts.defaults.enable_print
-                            :ruleIndexing opts.defaults.rule_indexing
-                            :logLevel opts.defaults.log_level
-                            :bundlePaths ["${workspaceFolder}"]})]
-                (dap.run dconf)
-                (values {:ok true} nil)))))))
+    (tset vim.lsp.handlers :regal/startDebugging (lsp.debug-codelens-handler dap opts)))
+  (when opts.codelens_handlers.show_eval_result
+    (tset vim.lsp.handlers :regal/showEvalResult (lsp.evaluate-codelens-handler))))
 
 (fn setup [opts]
   (let [opts (vim.tbl_deep_extend :force default-opts (or opts {}))
