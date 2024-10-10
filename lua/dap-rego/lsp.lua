@@ -18,7 +18,7 @@ local function extmark_prints(ns, outputs)
     if (path == current) then
       for l, _3_ in pairs(prints) do
         local rawtxt = _3_[1]
-        local txt = ("=> " .. vim.fn.json_encode(rawtxt))
+        local txt = ("=> " .. rawtxt)
         local line = (l - 1)
         vim.api.nvim_buf_set_extmark(0, ns, line, 0, {virt_text = {{txt, "Comment"}}, virt_text_pos = "eol"})
       end

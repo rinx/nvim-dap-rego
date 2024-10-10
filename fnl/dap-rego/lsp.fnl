@@ -24,7 +24,7 @@
           current (vim.fn.expand "%:p")]
       (when (= path current)
         (each [l [rawtxt] (pairs prints)]
-          (let [txt (.. "=> " (vim.fn.json_encode rawtxt))
+          (let [txt (.. "=> " rawtxt)
                 line (- l 1)]
             (vim.api.nvim_buf_set_extmark
               0 ns line 0
