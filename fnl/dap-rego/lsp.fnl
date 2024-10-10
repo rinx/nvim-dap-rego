@@ -23,7 +23,7 @@
     (let [path (vim.fn.substitute file "^file://" "" "")
           current (vim.fn.expand "%:p")]
       (when (= path current)
-        (each [l rawtxt (pairs prints)]
+        (each [l [rawtxt] (pairs prints)]
           (let [txt (.. "=> " (vim.fn.json_encode rawtxt))
                 line (- l 1)]
             (vim.api.nvim_buf_set_extmark

@@ -16,7 +16,8 @@ local function extmark_prints(ns, outputs)
     local path = vim.fn.substitute(file, "^file://", "", "")
     local current = vim.fn.expand("%:p")
     if (path == current) then
-      for l, rawtxt in pairs(prints) do
+      for l, _3_ in pairs(prints) do
+        local rawtxt = _3_[1]
         local txt = ("=> " .. vim.fn.json_encode(rawtxt))
         local line = (l - 1)
         vim.api.nvim_buf_set_extmark(0, ns, line, 0, {virt_text = {{txt, "Comment"}}, virt_text_pos = "eol"})
@@ -40,7 +41,7 @@ local function extmark_rule_heads(ns, result)
   return nil
 end
 local function evaluate_codelens_handler()
-  local function _4_(err, result, ctx, config)
+  local function _5_(err, result, ctx, config)
     do
       local ns = vim.api.nvim_create_namespace("regal.codelens.evaluate")
       vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
@@ -53,6 +54,6 @@ local function evaluate_codelens_handler()
     end
     return {ok = true}, nil
   end
-  return _4_
+  return _5_
 end
 return {["debug-codelens-handler"] = debug_codelens_handler, ["evaluate-codelens-handler"] = evaluate_codelens_handler}
