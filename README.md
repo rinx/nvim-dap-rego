@@ -3,6 +3,9 @@
 nvim-dap-rego is an extension for nvim-dap, used for debugging OPA/Rego using Regal (https://github.com/StyraInc/regal).
 This extension sets up adapter and basic configurations for debugging Rego policies.
 
+This extension also provides Neovim LSP handlers for Regal Codelenses.
+It is useful if you use Regal's LSP feature.
+
 ## Install
 
 This extension requires both nvim-dap and Regal (>= 0.26.0).
@@ -87,3 +90,16 @@ require('dap-rego').setup(
   }
 )
 ```
+
+## LSP Handlers
+
+This extension additionally provides Neovim LSP handlers for these Regal's Codelens features.
+
+- Evaluate Codelens (`regal/showEvalResult`)
+    - Provides a feature to evaluate rules on the buffer.
+      This handler shows the evaluation result as virtual texts.
+    - Ref: https://docs.styra.com/regal/language-server#code-lenses-evaluation
+- Debug Codelens (`regal/startDebugging`)
+    - Provides a feature to provide a launch configuration about a rule or package.
+      This handler starts a new debug session by the provided configuration.
+    - Ref: https://github.com/StyraInc/regal/releases/tag/v0.27.0
