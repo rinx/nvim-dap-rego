@@ -23,12 +23,15 @@
     (let [path (vim.fn.substitute file "^file://" "" "")
           current (vim.fn.expand "%:p")]
       (when (= path current)
-        (each [l [rawtxt] (pairs prints)]
-          (let [txt (.. "=> " rawtxt)
-                line (- l 1)]
+        (vim.notify (vim.inspect prints))
+        (each [l rawtxts (pairs prints)]
+          (var text "")
+          (let [line (- l 1)]
+            (each [_ rawtxt (ipairs rawtxts)]
+              (set text (.. text " => " rawtxt)))
             (vim.api.nvim_buf_set_extmark
               0 ns line 0
-              {:virt_text [[txt :Comment]]
+              {:virt_text [[text :Comment]]
                :virt_text_pos :eol})))))))
 
 (fn extmark-package [ns result]
