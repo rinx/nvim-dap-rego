@@ -95,6 +95,8 @@ require('dap-rego').setup(
 
 This extension additionally provides Neovim LSP handlers for these Regal's Codelens features.
 
+![nvim-regal-codelens](https://github.com/user-attachments/assets/582162c5-de4c-42f0-bbff-12d106ac53d1)
+
 - Evaluate Codelens (`regal/showEvalResult`)
     - Provides a feature to evaluate rules on the buffer.
       This handler shows the evaluation result as virtual texts.
@@ -103,3 +105,16 @@ This extension additionally provides Neovim LSP handlers for these Regal's Codel
     - Provides a feature to provide a launch configuration about a rule or package.
       This handler starts a new debug session by the provided configuration.
     - Ref: https://github.com/StyraInc/regal/releases/tag/v0.27.0
+
+To enable these features, it is needed to enable codelens features by setting `init_options`.
+
+```lua
+require'lspconfig'.regal.setup(
+  {
+    init_options = {
+      enableDebugCodelens = true,
+      evalCodelensDisplayInline = true,
+    },
+  }
+)
+```

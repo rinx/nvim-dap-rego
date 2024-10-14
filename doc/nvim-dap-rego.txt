@@ -126,4 +126,19 @@ Debug Codelens (`regal/startDebugging`)       *dap-rego-lsp-handlers-debug*
     Ref: https://github.com/StyraInc/regal/releases/tag/v0.27.0
 
 
+To enable these features, it is needed to enable codelens features by
+setting `init_options`.
+
+
+>lua
+    require'lspconfig'.regal.setup(
+      {
+        init_options = {
+          enableDebugCodelens = true,
+          evalCodelensDisplayInline = true,
+        },
+      }
+    )
+<
+
 vim: ft=help tw=78 et ts=2 sw=2 sts=2 norl
