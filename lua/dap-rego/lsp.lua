@@ -1,4 +1,4 @@
--- [nfnl] Compiled from fnl/dap-rego/lsp.fnl by https://github.com/Olical/nfnl, do not edit.
+-- [nfnl] fnl/dap-rego/lsp.fnl
 local function debug_codelens_handler(dap, opts)
   local function _1_(err, result, ctx, config)
     if not (dap.session() == nil) then
@@ -16,7 +16,6 @@ local function extmark_prints(ns, outputs)
     local path = vim.fn.substitute(file, "^file://", "", "")
     local current = vim.fn.expand("%:p")
     if (path == current) then
-      vim.notify(vim.inspect(prints))
       for l, rawtxts in pairs(prints) do
         local text = ""
         local line = (l - 1)

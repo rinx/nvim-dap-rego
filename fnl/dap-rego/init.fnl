@@ -3,6 +3,7 @@
 
 (local default-opts
        {:adapter_name :regal-debug
+        :enable_dap_setup true
         :regal
         {:path :regal
          :args [:debug]}
@@ -77,17 +78,21 @@
                          opts.configurations)]
     (set dap.configurations.rego configurations)))
 
-(fn setup-lsp-codelens-handlers [dap opts]
+(fn setup-lsp-codelens-handler-debugging [dap opts]
   (when opts.codelens_handlers.start_debugging
-    (tset vim.lsp.handlers :regal/startDebugging (lsp.debug-codelens-handler dap opts)))
+    (tset vim.lsp.handlers :regal/startDebugging (lsp.debug-codelens-handler dap opts))))
+
+(fn setup-lsp-codelens-handler-eval [opts]
   (when opts.codelens_handlers.show_eval_result
     (tset vim.lsp.handlers :regal/showEvalResult (lsp.evaluate-codelens-handler))))
 
 (fn setup [opts]
-  (let [opts (vim.tbl_deep_extend :force default-opts (or opts {}))
-        dap (utils.load-module :dap)]
-    (setup-adapter dap opts)
-    (setup-configurations dap opts)
-    (setup-lsp-codelens-handlers dap opts)))
+  (let [opts (vim.tbl_deep_extend :force default-opts (or opts {}))]
+    (when opts.enable_dap_setup
+      (let [dap (utils.load-module :dap)]
+        (setup-adapter dap opts)
+        (setup-configurations dap opts)
+        (setup-lsp-codelens-handler-debugging dap opts)))
+    (setup-lsp-codelens-handler-eval opts)))
 
 {: setup}

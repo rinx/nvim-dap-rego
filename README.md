@@ -53,6 +53,10 @@ require('dap-rego').setup(
     -- dap adapter name
     adapter_name = "regal-debug",
 
+    -- enable dap features
+    -- if you want to use only `regal/showEvalResult` handler, it is recommended to set it to false
+    enable_dap_setup = true,
+
     -- regal executable options
     regal = {
       -- the path to the regal executable

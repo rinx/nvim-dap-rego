@@ -23,7 +23,6 @@
     (let [path (vim.fn.substitute file "^file://" "" "")
           current (vim.fn.expand "%:p")]
       (when (= path current)
-        (vim.notify (vim.inspect prints))
         (each [l rawtxts (pairs prints)]
           (var text "")
           (let [line (- l 1)]

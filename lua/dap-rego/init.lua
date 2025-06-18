@@ -1,7 +1,7 @@
--- [nfnl] Compiled from fnl/dap-rego/init.fnl by https://github.com/Olical/nfnl, do not edit.
+-- [nfnl] fnl/dap-rego/init.fnl
 local utils = require("dap-rego.utils")
 local lsp = require("dap-rego.lsp")
-local default_opts = {adapter_name = "regal-debug", regal = {path = "regal", args = {"debug"}}, defaults = {log_level = "info", stop_on_entry = true, stop_on_result = true, trace = true, enable_print = true, rule_indexing = false, stop_on_fail = false}, configurations = {}, codelens_handlers = {start_debugging = true, show_eval_result = true}}
+local default_opts = {adapter_name = "regal-debug", enable_dap_setup = true, regal = {path = "regal", args = {"debug"}}, defaults = {log_level = "info", stop_on_entry = true, stop_on_result = true, trace = true, enable_print = true, rule_indexing = false, stop_on_fail = false}, configurations = {}, codelens_handlers = {start_debugging = true, show_eval_result = true}}
 local function default_configurations(dap, opts)
   local find_input_path
   local function _1_()
@@ -39,11 +39,15 @@ local function setup_configurations(dap, opts)
   dap.configurations.rego = configurations
   return nil
 end
-local function setup_lsp_codelens_handlers(dap, opts)
+local function setup_lsp_codelens_handler_debugging(dap, opts)
   if opts.codelens_handlers.start_debugging then
     vim.lsp.handlers["regal/startDebugging"] = lsp["debug-codelens-handler"](dap, opts)
+    return nil
   else
+    return nil
   end
+end
+local function setup_lsp_codelens_handler_eval(opts)
   if opts.codelens_handlers.show_eval_result then
     vim.lsp.handlers["regal/showEvalResult"] = lsp["evaluate-codelens-handler"]()
     return nil
@@ -53,9 +57,13 @@ local function setup_lsp_codelens_handlers(dap, opts)
 end
 local function setup(opts)
   local opts0 = vim.tbl_deep_extend("force", default_opts, (opts or {}))
-  local dap = utils["load-module"]("dap")
-  setup_adapter(dap, opts0)
-  setup_configurations(dap, opts0)
-  return setup_lsp_codelens_handlers(dap, opts0)
+  if opts0.enable_dap_setup then
+    local dap = utils["load-module"]("dap")
+    setup_adapter(dap, opts0)
+    setup_configurations(dap, opts0)
+    setup_lsp_codelens_handler_debugging(dap, opts0)
+  else
+  end
+  return setup_lsp_codelens_handler_eval(opts0)
 end
 return {setup = setup}
